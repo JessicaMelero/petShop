@@ -48,9 +48,10 @@ App = {
   },
 
   initContract: function() {
-    /*
-     * Replace me...
-     */
+    $.getJSON('Adoption.json', function(data) {
+      // Obtiene el archivo necesario y lo instancia  con truffle-contract
+      
+    })
 
     return App.bindEvents();
   },
