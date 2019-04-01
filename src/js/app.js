@@ -49,8 +49,13 @@ App = {
 
   initContract: function() {
     $.getJSON('Adoption.json', function(data) {
-      // Obtiene el archivo necesario y lo instancia  con truffle-contract
-      
+      // Obtiene el archivo de artefacto necesario y lo instancia  con truffle-contract
+      var AdoptionArtifact = data;
+      App.contracts.ADoption = TruffleContract(AdoptionArtifact);
+      // Configuramos el proveedor de nuestro contrato
+      App.contracts.ADoption.setProvider(App.web3Provider);
+      // Usa nuestro contrato para devolver y marcar las mascotas adoptadas
+      return App.markAdopted();
     })
 
     return App.bindEvents();
@@ -61,9 +66,25 @@ App = {
   },
 
   markAdopted: function(adopters, account) {
-    /*
-     * Replace me...
-     */
+    // Declaración de la variable
+    var adoptionInstance;
+
+    App.contracts.ADoption.deployed().then(function(instance) {
+      adoptionInstance = instance;
+      // El uso de call nos permite leer datos de la cadena de bloques sin gastar éters
+      return adoptionInstance.getAdopters.call();
+    }).then(function(adopters) {
+      // Buscamos si hay alguna direccion almacena en la mascota
+      for (i=0; i<adopters.length; i++) {
+        if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
+          // Si la encontramos deshabilitamos el boton de adoptar y cambiamos el texto a 'Exitoso'
+          $('.panel-pet').eq(i).find('button').text('Success').atrr('disabled', true);
+        }
+      }
+      // Si hay algun erro se mostrará por consola
+    }).catch(function(err) {
+      console.log(err.message);
+    })
   },
 
   handleAdopt: function(event) {
