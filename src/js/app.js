@@ -92,9 +92,27 @@ App = {
 
     var petId = parseInt($(event.target).data('id'));
 
-    /*
-     * Replace me...
-     */
+    var adoptionInstance;
+    // Obtenemos las cuentas de los usuarios
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      // Obtenemos el contrato desplegado
+      App.contracts.Adoption.deployed().then(function(instance) {
+        adoptionInstance = instance;
+        // Ejecuta adopt como una transaccion de la cuenta
+        return adoptionInstance.adopt(petId, {from: account});
+        // Si no hay errores, llamamos a markAdopted() para sincronizar la 
+        // interfaz de usuario con los datos recién almacenados
+      }).then(function(result) {
+        return App.markAdopted();
+      }).catch(function(err) {
+        console.log(err.message);
+      })
+    })
   }
 
 };
