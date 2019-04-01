@@ -51,9 +51,9 @@ App = {
     $.getJSON('Adoption.json', function(data) {
       // Obtiene el archivo de artefacto necesario y lo instancia  con truffle-contract
       var AdoptionArtifact = data;
-      App.contracts.ADoption = TruffleContract(AdoptionArtifact);
+      App.contracts.Adoption = TruffleContract(AdoptionArtifact);
       // Configuramos el proveedor de nuestro contrato
-      App.contracts.ADoption.setProvider(App.web3Provider);
+      App.contracts.Adoption.setProvider(App.web3Provider);
       // Usa nuestro contrato para devolver y marcar las mascotas adoptadas
       return App.markAdopted();
     })
@@ -69,7 +69,7 @@ App = {
     // Declaración de la variable
     var adoptionInstance;
 
-    App.contracts.ADoption.deployed().then(function(instance) {
+    App.contracts.Adoption.deployed().then(function(instance) {
       adoptionInstance = instance;
       // El uso de call nos permite leer datos de la cadena de bloques sin gastar éters
       return adoptionInstance.getAdopters.call();
@@ -98,7 +98,6 @@ App = {
       if (error) {
         console.log(error);
       }
-
       var account = accounts[0];
       // Obtenemos el contrato desplegado
       App.contracts.Adoption.deployed().then(function(instance) {
