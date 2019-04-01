@@ -24,10 +24,26 @@ App = {
   },
 
   initWeb3: async function() {
-    /*
-     * Replace me...
-     */
-
+    // Verificamos que estamos usando navegadores modernos
+    if (window.ethereum) {
+      App.web3Provider = window.ethereum;
+      try {
+        // Respuesta de acceso aprobado
+        await window.ethereum.enable();
+      } catch (error) {
+        // Respuesta de acceso denegado
+        console.error("User denied account access");
+      }
+    }
+    // Sino, obtenemos el proveedor del navagador antiguo
+    else if (window.web3) {
+      App.web3Provider = window.web3.currentProvider;
+    }
+    // Si no detecta una instancia de web3, vuelve a Ganache
+    else {
+      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
+    }
+    web3 = new Web3(App.web3Provider);
     return App.initContract();
   },
 

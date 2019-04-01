@@ -31,7 +31,7 @@ contract TestAdoption {
     }
     // Testeo para recuperar todos los dueños de las mascotas
     function testGetAdopterAddressByPetIdInArray() public {
-        // Almacenmiento de mascotas adoptadas en memoria
+        // Almacenmiento de mascotas adoptadas en memoria temporalmente
         address[16] memory adopters = adoption.getAdopters();
         // Confirma la igualdad de las direcciones
         Assert.equal(adopters[expectedPetId], expectedAdopter, "Owner of the expected pet should be this contract");
